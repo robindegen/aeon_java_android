@@ -1,9 +1,0 @@
-*.apk
-*.ap_
-*.dex
-*.class
-bin/
-gen/
-libs/
-doc/
-doc/* -diff
