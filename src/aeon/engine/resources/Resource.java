@@ -24,15 +24,24 @@ package aeon.engine.resources;
 
 public abstract class Resource
 {
-	public Resource(ResourceType type, String name)
+	public Resource(ResourceType type)
 	{
 		m_type = type;
-		m_name = name;
+		m_loaded = false;
 	}
 	
-	public abstract boolean 		load(ResourceManager resourcemanager);
-	public abstract boolean 		unload(ResourceManager resourcemanager);
+	public abstract boolean unload(ResourceManager resourcemanager);
+	
+	public ResourceType type()
+	{
+		return m_type;
+	}
+	
+	public boolean loaded()
+	{
+		return m_loaded;
+	}
 	
 	protected ResourceType			m_type;
-	protected String				m_name;
+	protected boolean				m_loaded;
 }
