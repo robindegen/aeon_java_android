@@ -22,6 +22,7 @@
 
 package aeon.engine.resources;
 
+import aeon.utility.Vector2f;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
@@ -31,6 +32,8 @@ public class Texture extends Resource
 	public Texture(Bitmap bitmap)
 	{
 		super(ResourceType.Texture);
+		
+		m_size.set(bitmap.getWidth(), bitmap.getHeight());
 		
 		__finalize_texture(bitmap);
 	}
@@ -47,6 +50,11 @@ public class Texture extends Resource
 	    GLES20.glDeleteTextures(1, handle, 0);
 
 		return true;
+	}
+	
+	public Vector2f get_size()
+	{
+		return m_size;
 	}
 	
 	private void __finalize_texture(Bitmap bitmap)
@@ -74,5 +82,6 @@ public class Texture extends Resource
 		return handle[0];
 	}
 
-	int m_texture = 0;
+	int 			m_texture = 0;
+	Vector2f 		m_size;
 }

@@ -2,11 +2,22 @@ package aeon.engine;
 
 import aeon.engine.resources.Texture;
 import aeon.utility.Color;
+import aeon.utility.Vector2f;
 
 public class Sprite
 {
+	public Sprite(Texture texture)
+	{
+		__init_vertex_data();
+		set_size(texture.get_size());
+	}
+	
 	public Sprite(Texture texture, boolean autosize)
 	{
+		__init_vertex_data();
+		
+		if(autosize)
+			set_size(texture.get_size());
 	}
 	
 	public void set_color(Color color)
@@ -14,8 +25,31 @@ public class Sprite
 		m_color = color;
 	}
 	
+	public void set_size(float width, float height)
+	{
+		m_vertex_data[5] = height;
+		m_vertex_data[8] = width;
+		m_vertex_data[12] = width;
+		m_vertex_data[13] = height;
+	}
+	
+	public void set_size(Vector2f size)
+	{
+		set_size(size.x, size.y);
+	}
+	
 	private void __init_vertex_data()
 	{
+		/*
+		 * Vertex data is interleaved with UV texture mapping.
+		 * A vertex looks like this:
+		 * struct Vertex
+		 * {
+		 *    float position[2];
+		 *    float uv[2];
+		 * }
+		 */
+		
 		m_vertex_data[0] = 0;
 		m_vertex_data[1] = 0;
 		m_vertex_data[2] = 0;
@@ -28,26 +62,13 @@ public class Sprite
 		
 		m_vertex_data[8] = 0;
 		m_vertex_data[9] = 0;
+		m_vertex_data[10] = 1;
+		m_vertex_data[11] = 0;
 		
-		//Position data
-		/*mVertexData[0].position[0] = 0.0f;
-		mVertexData[0].position[1] = 0.0f;
-		mVertexData[1].position[0] = 0.0f;
-		mVertexData[1].position[1] = 0.0f;
-		mVertexData[2].position[0] = 0.0f;
-		mVertexData[2].position[1] = 0.0f;
-		mVertexData[3].position[0] = 0.0f;
-		mVertexData[3].position[1] = 0.0f;
-
-		//UV data
-		mVertexData[0].uv[0] = 0.0f;
-		mVertexData[0].uv[1] = 0.0f;
-		mVertexData[1].uv[0] = 0.0f;
-		mVertexData[1].uv[1] = 1.0f;
-		mVertexData[2].uv[0] = 1.0f;
-		mVertexData[2].uv[1] = 0.0f;
-		mVertexData[3].uv[0] = 1.0f;
-		mVertexData[3].uv[1] = 1.0f;*/
+		m_vertex_data[12] = 0;
+		m_vertex_data[13] = 0;
+		m_vertex_data[14] = 1;
+		m_vertex_data[15] = 1;
 	}
 	
 	//4 points of 2 vertex and 2 uv data floats
