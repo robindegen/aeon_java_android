@@ -40,7 +40,6 @@ public class AeonRenderer implements GLSurfaceView.Renderer
     {
     	Logger.Info("Setting up GLES...");
     	
-        // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         
         //After all this, the game is initialized. So we can call the on_game_loaded.

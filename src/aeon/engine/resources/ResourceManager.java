@@ -34,7 +34,7 @@ import android.graphics.BitmapFactory;
 public class ResourceManager
 {
 	//TODO: We can move texture loading to another thread and do finalizing (upload to GPU) on the render thread
-	public Texture load_texture(String name)
+	public static Texture load_texture(String name)
 	{
 		Resource resource = __check_if_resource_loaded(name, ResourceType.Texture);
 		
@@ -57,7 +57,7 @@ public class ResourceManager
 		return texture;
 	}
 	
-	public Shader load_shader(String name)
+	public static Shader load_shader(String name)
 	{
 		Resource resource = __check_if_resource_loaded(name, ResourceType.Texture);
 		
@@ -68,7 +68,7 @@ public class ResourceManager
 		Shader shader = new Shader();
 		
 		//Load the shader and check the result
-		if(!shader.load(this, name))
+		if(!shader.load(name))
 			return null;
 			
 		__register_resource(name, shader);
@@ -76,7 +76,7 @@ public class ResourceManager
 		return shader;
 	}
 
-	public String read_asset_as_string(String filename)
+	public static String read_asset_as_string(String filename)
 	{	
 		try
 		{
@@ -99,7 +99,7 @@ public class ResourceManager
 		return null;
 	}
 	
-	public Bitmap read_asset_as_bitmap(String filename)
+	public static Bitmap read_asset_as_bitmap(String filename)
 	{
 		try
 		{
@@ -117,7 +117,7 @@ public class ResourceManager
 	    return null;
 	}
 	
-	private Resource __check_if_resource_loaded(String name, ResourceType type)
+	private static Resource __check_if_resource_loaded(String name, ResourceType type)
 	{
 		//See if the resource is loaded already
 		Resource resource = m_loaded_resources.get(name);
@@ -151,7 +151,7 @@ public class ResourceManager
 		return resource;
 	}
 	
-	private void __register_resource(String name, Resource resource)
+	private static void __register_resource(String name, Resource resource)
 	{
 		Resource previous_resource = m_loaded_resources.put(name, resource);
 		
@@ -167,5 +167,5 @@ public class ResourceManager
 		}
 	}
 	
-	private Map<String, Resource> m_loaded_resources = new HashMap<String, Resource>();
+	private static Map<String, Resource> m_loaded_resources = new HashMap<String, Resource>();
 }

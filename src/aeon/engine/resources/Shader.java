@@ -24,7 +24,6 @@ package aeon.engine.resources;
 
 import aeon.console.Logger;
 import aeon.utility.Color;
-import android.graphics.Matrix;
 import android.opengl.GLES20;
 
 public class Shader extends Resource
@@ -47,13 +46,13 @@ public class Shader extends Resource
 		super(ResourceType.Shader);
 	}
 	
-	public boolean load(ResourceManager resourcemanager, String name)
+	public boolean load(String name)
 	{
 		if(name == null || name == "")
 			return false;
 		
 		//Load the vertex shader from file
-		String vertex_src = resourcemanager.read_asset_as_string(name + ".vert");
+		String vertex_src = ResourceManager.read_asset_as_string(name + ".vert");
 		
 		if(vertex_src == null)
 			return false;
@@ -65,7 +64,7 @@ public class Shader extends Resource
 			return false;
 		
 		//Load the fragment shader from file
-		String fragment_src = resourcemanager.read_asset_as_string(name + ".frag");
+		String fragment_src = ResourceManager.read_asset_as_string(name + ".frag");
 		
 		if(fragment_src == null)
 			return false;
@@ -98,7 +97,17 @@ public class Shader extends Resource
 		m_texture0_handle = GLES20.glGetUniformLocation(m_program, SHADER_TEXTURE0_NAME);
 		m_color0_handle = GLES20.glGetUniformLocation(m_program, SHADER_COLOR0_NAME);
 		
-		//TODO: Check handle values to see if all uniforms were found in the shaders.
+		if(
+			m_projection_matrix_handle == -1 ||
+			m_model_matrix_handle == -1 ||
+			m_view_matrix_handle == -1 ||
+			m_texture0_handle == -1 ||
+			m_color0_handle == -1)
+		{
+			Logger.Warning("Not all required uniform variables were found in the shader. " +
+					"This may lead to unexpected behavior."
+			);
+		}
 		
 		m_loaded = true;
 		
@@ -131,31 +140,27 @@ public class Shader extends Resource
 			GLES20.glUseProgram(m_program);
 	}
 	
-	public void set_projection_matrix(Matrix matrix)
+	public void set_projection_matrix(float[] matrix)
 	{
 		__set_matrix(matrix, m_projection_matrix_handle);
 	}
 	
-	public void set_model_matrix(Matrix matrix)
+	public void set_model_matrix(float[] matrix)
 	{
 		__set_matrix(matrix, m_model_matrix_handle);
 	}
 	
-	public void set_view_matrix(Matrix matrix)
+	public void set_view_matrix(float[] matrix)
 	{
 		__set_matrix(matrix, m_view_matrix_handle);
 	}
 	
-	private void __set_matrix(Matrix matrix, int handle)
+	private void __set_matrix(float[] matrix, int handle)
 	{
 		if(matrix == null || handle == -1)
 			return;
-	
-		//TODO: find a better way to do this...
-		float[] buffer = new float[16];
-		matrix.getValues(buffer);
 		
-		GLES20.glUniformMatrix4fv(handle, 1, false, buffer, 0);
+		GLES20.glUniformMatrix4fv(handle, 1, false, matrix, 0);
 	}
 	
 	public void set_color(Color color)

@@ -14,7 +14,7 @@ public class ExampleGame extends AeonActivity
 	@Override
 	public void on_update(float dt)
 	{
-		Logger.Info("on_update()");
+		//Logger.Info("on_update()");
 	}
 
 	@Override

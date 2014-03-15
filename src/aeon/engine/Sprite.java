@@ -20,9 +20,9 @@ public class Sprite
 			set_size(texture.get_size());
 	}
 	
-	public void set_color(Color color)
+	public Color get_color()
 	{
-		m_color = color;
+		return m_color;
 	}
 	
 	public void set_size(float width, float height)
@@ -36,6 +36,11 @@ public class Sprite
 	public void set_size(Vector2f size)
 	{
 		set_size(size.x, size.y);
+	}
+	
+	public float[] get_matrix()
+	{
+		return m_matrix;
 	}
 	
 	private void __init_vertex_data()
@@ -74,4 +79,6 @@ public class Sprite
 	//4 points of 2 vertex and 2 uv data floats
 	private float [] m_vertex_data = new float[4 * 4];
 	private Color m_color = new Color(1, 1, 1);
+	
+	private float [] m_matrix = new float[16];
 }
