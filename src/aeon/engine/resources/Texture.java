@@ -52,6 +52,14 @@ public class Texture extends Resource
 		return true;
 	}
 	
+	public void bind()
+	{
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, m_texture);
+
+		//TODO: query the texture from the active shader
+		GLES20.glUniform1i(0, 0);
+	}
+	
 	public Vector2f get_size()
 	{
 		return m_size;

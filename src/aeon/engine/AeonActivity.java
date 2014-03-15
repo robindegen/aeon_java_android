@@ -30,8 +30,6 @@ import android.view.WindowManager;
 
 public abstract class AeonActivity extends Activity
 {
-    private GLSurfaceView mGLView;
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -44,7 +42,7 @@ public abstract class AeonActivity extends Activity
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        mGLView = new AeonGLSurface(this);
+        m_glsurfaceview = new AeonGLSurface(this);
         
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -52,7 +50,17 @@ public abstract class AeonActivity extends Activity
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        setContentView(mGLView);
+        setContentView(m_glsurfaceview);
+    }
+    
+    public AeonRenderer get_renderer()
+    {
+    	return m_renderer;
+    }
+    
+    public void register_renderer(AeonRenderer renderer)
+    {
+    	m_renderer = renderer;
     }
     
     public static AeonActivity get_singleton()
@@ -67,4 +75,7 @@ public abstract class AeonActivity extends Activity
     public abstract void on_game_stop();
     
     private static AeonActivity 		m_singleton;
+    
+    private GLSurfaceView 				m_glsurfaceview;
+    private AeonRenderer				m_renderer;
 }

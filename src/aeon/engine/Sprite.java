@@ -22,6 +22,10 @@
 
 package aeon.engine;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import aeon.engine.resources.Texture;
 import aeon.utility.Color;
 import aeon.utility.Vector2f;
@@ -32,22 +36,30 @@ public class Sprite
 	public Sprite(Texture texture)
 	{
 		__init_vertex_data();
+		__setup_bytebuffer();
 		
 		m_texture = texture;
 		Matrix.setIdentityM(m_matrix, 0);
 		
-		set_size(texture.get_size());
+		set_size(texture.get_size());		
+		
+		//TODO: Do this better....
+		AeonActivity.get_singleton().get_renderer().add_sprite(this);
 	}
 	
 	public Sprite(Texture texture, boolean autosize)
 	{
 		__init_vertex_data();
+		__setup_bytebuffer();
 		
 		m_texture = texture;
 		Matrix.setIdentityM(m_matrix, 0);
 		
 		if(autosize)
 			set_size(texture.get_size());
+		
+		//TODO: Do this better....
+		AeonActivity.get_singleton().get_renderer().add_sprite(this);
 	}
 	
 	public Color get_color()
@@ -61,6 +73,10 @@ public class Sprite
 		m_vertex_data[8] = width;
 		m_vertex_data[12] = width;
 		m_vertex_data[13] = height;
+		
+		//Write the new data into the vertexbuffer
+        m_vertexbuffer.put(m_vertex_data);
+        m_vertexbuffer.position(0);
 	}
 	
 	public void set_size(Vector2f size)
@@ -73,9 +89,9 @@ public class Sprite
 		return m_matrix;
 	}
 	
-	public float [] get_vertex_data()
+	public FloatBuffer get_vertex_data()
 	{
-		return m_vertex_data;
+		return m_vertexbuffer;
 	}
 	
 	public Texture get_texture()
@@ -116,9 +132,26 @@ public class Sprite
 		m_vertex_data[15] = 1;
 	}
 	
+	private void __setup_bytebuffer()
+	{
+		m_bytebuffer = ByteBuffer.allocateDirect
+		(
+			//Amount of vertices * sizeof(float)
+			m_vertex_data.length * 4
+		);
+		
+        // use the device hardware's native byte order
+		m_bytebuffer.order(ByteOrder.nativeOrder());
+        
+        m_vertexbuffer = m_bytebuffer.asFloatBuffer();
+	}
+	
 	//4 points of 2 vertex and 2 uv data floats
 	private float [] 	m_vertex_data = new float[4 * 4];
 	private Texture 	m_texture;
 	private Color 		m_color = new Color(1, 1, 1);
 	private float [] 	m_matrix = new float[16];
+	
+	private ByteBuffer m_bytebuffer;
+	private FloatBuffer m_vertexbuffer;
 }

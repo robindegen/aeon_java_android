@@ -28,18 +28,18 @@ import android.opengl.GLES20;
 
 public class Shader extends Resource
 {
-	private final String 	SHADER_PROJECTION_MATRIX_NAME 	= "age_projection_matrix";
-	private final String 	SHADER_MODEL_MATRIX_NAME 		= "age_model_matrix";
-	private final String 	SHADER_VIEW_MATRIX_NAME 		= "age_view_matrix";
+	private static final String 	SHADER_PROJECTION_MATRIX_NAME 	= "age_projection_matrix";
+	private static final String 	SHADER_MODEL_MATRIX_NAME 		= "age_model_matrix";
+	private static final String 	SHADER_VIEW_MATRIX_NAME 		= "age_view_matrix";
 	
-	private final String 	SHADER_TEXTURE0_NAME 			= "age_texture";
-	private final String 	SHADER_COLOR0_NAME 				= "age_color";
+	private static final String 	SHADER_TEXTURE0_NAME 			= "age_texture";
+	private static final String 	SHADER_COLOR0_NAME 				= "age_color";
 	
-	private final int 		SHADER_ATTRIB_VERTEX_ID 		= 0;
-	private final String 	SHADER_ATTRIB_VERTEX_NAME 		= "age_position";
+	public static final int 		SHADER_ATTRIB_VERTEX_ID 		= 0;
+	private static final String 	SHADER_ATTRIB_VERTEX_NAME 		= "age_position";
 	
-	private final int 		SHADER_ATTRIB_TEXCOORD_ID 		= 1;
-	private final String 	SHADER_ATTRIB_TEXCOORD_NAME 	= "age_texcoord";
+	public static final int 		SHADER_ATTRIB_TEXCOORD_ID 		= 1;
+	private static final String 	SHADER_ATTRIB_TEXCOORD_NAME 	= "age_texcoord";
 	
 	public Shader()
 	{

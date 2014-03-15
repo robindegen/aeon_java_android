@@ -41,8 +41,10 @@ public class AeonGLSurface extends GLSurfaceView
         
         // Set the Renderer for drawing on the GLSurfaceView
         Logger.Info("Starting renderer...");
-        setRenderer(new AeonRenderer(m_activity));
+        m_renderer = new AeonRenderer(m_activity);
+        setRenderer(m_renderer);
     }
     
     private AeonActivity m_activity;
+    private AeonRenderer m_renderer;
 }

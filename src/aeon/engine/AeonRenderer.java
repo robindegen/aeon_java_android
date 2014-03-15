@@ -22,6 +22,8 @@
 
 package aeon.engine;
 
+import java.util.Vector;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -34,12 +36,13 @@ import android.opengl.Matrix;
 
 public class AeonRenderer implements GLSurfaceView.Renderer
 {
-	private final int FULLSCREEN_VIRTUAL_RESOLUTION_WIDTH = 1280;
-	private final int FULLSCREEN_VIRTUAL_RESOLUTION_HEIGHT = 720;
+	private static final int FULLSCREEN_VIRTUAL_RESOLUTION_WIDTH = 1280;
+	private static final int FULLSCREEN_VIRTUAL_RESOLUTION_HEIGHT = 720;
 	
 	AeonRenderer(AeonActivity activity)
 	{
 		m_activity = activity;
+		m_activity.register_renderer(this);
 	}
 	
     public void onSurfaceCreated(GL10 unused, EGLConfig config)
@@ -63,16 +66,63 @@ public class AeonRenderer implements GLSurfaceView.Renderer
         
         //TODO: Calculate delta time.
         m_activity.on_update(0.1f);
+        
+        m_active_shader.bind();
+        
+        //Draw everything
+        for (Sprite sprite : m_sprites)
+        {
+        	sprite.get_texture().bind();
+
+        	//Set up our matrix in the shader
+        	m_active_shader.set_model_matrix(sprite.get_matrix());
+
+        	//Set the color
+        	m_active_shader.set_color(sprite.get_color());
+
+        	//Set up our buffers to render.
+        	GLES20.glVertexAttribPointer(
+    			Shader.SHADER_ATTRIB_VERTEX_ID,
+    			2, 
+    			GLES20.GL_FLOAT, 
+    			false, 
+    			4 * 4, 
+    			sprite.get_vertex_data()
+        	);
+        	
+        	GLES20.glEnableVertexAttribArray(Shader.SHADER_ATTRIB_VERTEX_ID);
+
+        	//The texture offsets start at UV in the struct. However we need to cast vertex data to a char first so we add the offset in bytes
+        	//properly. This might seem weird.. but it's the only proper way that doesn't generate a gcc warning.
+        	/*GLES20.glVertexAttribPointer(
+        			Shader.SHADER_ATTRIB_TEXCOORD_ID,
+        			2,
+        			GLES20.GL_FLOAT, 
+        			false, 
+        			4 * 4,
+        			sprite.get_vertex_data().
+        	);
+        	
+        	glEnableVertexAttribArray(SHADER_ATTRIB_TEXCOORD_ID);*/
+
+        	GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        }
     }
 
     public void onSurfaceChanged(GL10 unused, int width, int height)
     {
         GLES20.glViewport(0, 0, width, height);
     }
+  
+    public void add_sprite(Sprite sprite)
+    {
+    	m_sprites.add(sprite);
+    }
     
     private void __setup_gles()
     {
     	GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    	GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
     }
     
     private void __load_internal_resources()
@@ -104,8 +154,10 @@ public class AeonRenderer implements GLSurfaceView.Renderer
     	Matrix.setIdentityM(m_view_matrix, 0);
     	
     	m_default_shader.set_projection_matrix(m_projection_matrix);
+    	m_default_shader.set_view_matrix(m_view_matrix);
     }
     
+    Vector<Sprite> m_sprites = new Vector<Sprite>();
     AeonActivity m_activity;
     
     Shader m_default_shader;

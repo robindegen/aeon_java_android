@@ -27,6 +27,7 @@ import aeon.engine.AeonActivity;
 import aeon.engine.Sprite;
 import aeon.engine.resources.ResourceManager;
 import aeon.engine.resources.Texture;
+import android.opengl.Matrix;
 
 public class ExampleGame extends AeonActivity
 {
@@ -40,6 +41,8 @@ public class ExampleGame extends AeonActivity
 		
 		texture = ResourceManager.load_texture("textures/mario.png");
 		sprite = new Sprite(texture);
+		
+		Matrix.translateM(sprite.get_matrix(), 0, 10, 10, 0);
 	}
 
 	@Override
