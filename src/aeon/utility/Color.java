@@ -26,17 +26,17 @@ public class Color
 {
 	public Color(float _r, float _g, float _b)
 	{
-		_r = r;
-		_g = g;
-		_b = b;
+		r = _r;
+		g = _g;
+		b = _b;
 	}
 	
 	public Color(float _r, float _g, float _b, float _a)
 	{
-		_r = r;
-		_g = g;
-		_b = b;
-		_a = a;
+		r = _r;
+		g = _g;
+		b = _b;
+		a = _a;
 	}
 	
 	public float r = 0;
