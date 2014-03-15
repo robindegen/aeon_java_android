@@ -30,7 +30,7 @@ public abstract class Resource
 		m_loaded = false;
 	}
 	
-	public abstract boolean unload(ResourceManager resourcemanager);
+	public abstract boolean unload();
 	
 	public ResourceType type()
 	{

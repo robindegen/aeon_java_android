@@ -115,7 +115,7 @@ public class Shader extends Resource
 	}
 
 	@Override
-	public boolean unload(ResourceManager resourcemanager)
+	public boolean unload()
 	{
 		if(m_program != 0)
 		{

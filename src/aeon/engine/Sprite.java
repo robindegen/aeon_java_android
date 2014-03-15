@@ -9,12 +9,17 @@ public class Sprite
 	public Sprite(Texture texture)
 	{
 		__init_vertex_data();
+		
+		m_texture = texture;
+		
 		set_size(texture.get_size());
 	}
 	
 	public Sprite(Texture texture, boolean autosize)
 	{
 		__init_vertex_data();
+		
+		m_texture = texture;
 		
 		if(autosize)
 			set_size(texture.get_size());
@@ -41,6 +46,16 @@ public class Sprite
 	public float[] get_matrix()
 	{
 		return m_matrix;
+	}
+	
+	public float [] get_vertex_data()
+	{
+		return m_vertex_data;
+	}
+	
+	public Texture get_texture()
+	{
+		return m_texture;
 	}
 	
 	private void __init_vertex_data()
@@ -77,8 +92,8 @@ public class Sprite
 	}
 	
 	//4 points of 2 vertex and 2 uv data floats
-	private float [] m_vertex_data = new float[4 * 4];
-	private Color m_color = new Color(1, 1, 1);
-	
-	private float [] m_matrix = new float[16];
+	private float [] 	m_vertex_data = new float[4 * 4];
+	private Texture 	m_texture;
+	private Color 		m_color = new Color(1, 1, 1);
+	private float [] 	m_matrix = new float[16];
 }

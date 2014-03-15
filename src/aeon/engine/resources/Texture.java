@@ -39,7 +39,7 @@ public class Texture extends Resource
 	}
 
 	@Override
-	public boolean unload(ResourceManager resourcemanager)
+	public boolean unload()
 	{
 	    if (m_texture == 0)
 	    	return false;
