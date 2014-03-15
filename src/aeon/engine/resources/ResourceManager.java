@@ -36,17 +36,22 @@ public class ResourceManager
 	//TODO: We can move texture loading to another thread and do finalizing (upload to GPU) on the render thread
 	public static Texture load_texture(String name)
 	{
+		Logger.Debug("Loading texture " + name);
+		
 		Resource resource = __check_if_resource_loaded(name, ResourceType.Texture);
 		
 		//If the resource was already loaded, return that one.
 		if(resource != null)
+		{
+			Logger.Debug("Texture " + name + " was already loaded. Reusing resource");
 			return (Texture) resource;
+		}
 			
 		Bitmap bitmap = read_asset_as_bitmap(name);
 		
 		if(bitmap == null)
 		{
-			Logger.Error(String.format("Could not load texture %s.", name));
+			Logger.Error("Texture " + name + " failed to load.");
 			return null;
 		}
 		
@@ -59,17 +64,25 @@ public class ResourceManager
 	
 	public static Shader load_shader(String name)
 	{
+		Logger.Debug("Loading shader " + name);
+		
 		Resource resource = __check_if_resource_loaded(name, ResourceType.Texture);
 		
 		//If the resource was already loaded, return that one.
 		if(resource != null)
+		{
+			Logger.Debug("Shader " + name + " was already loaded. Reusing resource");
 			return (Shader) resource;
+		}
 			
 		Shader shader = new Shader();
 		
 		//Load the shader and check the result
 		if(!shader.load(name))
+		{
+			Logger.Error("Shader " + name + " failed to load.");
 			return null;
+		}
 			
 		__register_resource(name, shader);
 		

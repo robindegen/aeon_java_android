@@ -83,5 +83,5 @@ public class Texture extends Resource
 	}
 
 	int 			m_texture = 0;
-	Vector2f 		m_size;
+	Vector2f 		m_size = new Vector2f(0, 0);
 }

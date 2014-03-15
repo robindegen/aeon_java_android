@@ -26,11 +26,17 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import aeon.console.Logger;
+import aeon.engine.resources.ResourceManager;
+import aeon.engine.resources.Shader;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 
 public class AeonRenderer implements GLSurfaceView.Renderer
 {
+	private final int FULLSCREEN_VIRTUAL_RESOLUTION_WIDTH = 1280;
+	private final int FULLSCREEN_VIRTUAL_RESOLUTION_HEIGHT = 720;
+	
 	AeonRenderer(AeonActivity activity)
 	{
 		m_activity = activity;
@@ -40,10 +46,13 @@ public class AeonRenderer implements GLSurfaceView.Renderer
     {
     	Logger.Info("Setting up GLES...");
     	
-        GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-        
+    	__setup_gles();
+    	__load_internal_resources();
+    	__setup_matrices();
+    	
         //After all this, the game is initialized. So we can call the on_game_loaded.
         Logger.Info("Engine ready.");
+        
         m_activity.on_game_start();
     }
 
@@ -61,5 +70,47 @@ public class AeonRenderer implements GLSurfaceView.Renderer
         GLES20.glViewport(0, 0, width, height);
     }
     
+    private void __setup_gles()
+    {
+    	GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    }
+    
+    private void __load_internal_resources()
+    {
+        m_default_shader = ResourceManager.load_shader("shaders/default");
+        
+        if(m_default_shader == null)
+        {
+        	Logger.Error("Default shader could not be loaded. Rendering may not work.");
+        }
+        
+        m_active_shader = m_default_shader;
+    }
+    
+    private void __setup_matrices()
+    {
+    	//Set up our projection matrix to ortho, so that left top is 0,0
+    	Matrix.orthoM(
+			m_projection_matrix, 0, //Matrix and offset
+			0, //Left
+			FULLSCREEN_VIRTUAL_RESOLUTION_WIDTH, //Right
+			FULLSCREEN_VIRTUAL_RESOLUTION_HEIGHT, //Bottom
+			0, //Top
+			-1, //Near
+			1 //Far
+    	);
+    	
+    	//Set the rest up to be identity
+    	Matrix.setIdentityM(m_view_matrix, 0);
+    	
+    	m_default_shader.set_projection_matrix(m_projection_matrix);
+    }
+    
     AeonActivity m_activity;
+    
+    Shader m_default_shader;
+    Shader m_active_shader;
+    
+    float [] m_projection_matrix = new float[16];
+    float [] m_view_matrix = new float[16];
 }
