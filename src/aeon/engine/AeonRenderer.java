@@ -25,25 +25,42 @@ package aeon.engine;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import aeon.console.Logger;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 public class AeonRenderer implements GLSurfaceView.Renderer
 {
+	AeonRenderer(AeonActivity activity)
+	{
+		m_activity = activity;
+	}
+	
     public void onSurfaceCreated(GL10 unused, EGLConfig config)
     {
+    	Logger.Info("Setting up GLES...");
+    	
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+        
+        //After all this, the game is initialized. So we can call the on_game_loaded.
+        Logger.Info("Engine ready.");
+        m_activity.on_game_start();
     }
 
     public void onDrawFrame(GL10 unused)
     {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        
+        //TODO: Calculate delta time.
+        m_activity.on_update(0.1f);
     }
 
     public void onSurfaceChanged(GL10 unused, int width, int height)
     {
         GLES20.glViewport(0, 0, width, height);
     }
+    
+    AeonActivity m_activity;
 }

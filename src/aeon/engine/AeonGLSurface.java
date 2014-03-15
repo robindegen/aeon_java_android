@@ -22,19 +22,27 @@
 
 package aeon.engine;
 
+import aeon.console.Logger;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
 public class AeonGLSurface extends GLSurfaceView
 {
-    public AeonGLSurface(Context context)
+	//I'd rather this being a AeonActivity, but the SDK warns about expecting a Context type.
+    public AeonGLSurface(Context activity)
     {
-        super(context);
+        super(activity);
+        
+        m_activity = (AeonActivity) activity;
         
         // Create an OpenGL ES 2.0 context
+        Logger.Info("Creating EGL 2 context...");
         setEGLContextClientVersion(2);
-
+        
         // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(new AeonRenderer());
+        Logger.Info("Starting renderer...");
+        setRenderer(new AeonRenderer(m_activity));
     }
+    
+    private AeonActivity m_activity;
 }

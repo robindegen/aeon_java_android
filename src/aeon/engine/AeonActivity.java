@@ -21,13 +21,14 @@
 */
 
 package aeon.engine;
+import aeon.console.Logger;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class AeonActivity extends Activity
+public abstract class AeonActivity extends Activity
 {
     private GLSurfaceView mGLView;
 
@@ -35,6 +36,8 @@ public class AeonActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
+        Logger.Info("Aeon Android Game Engine initializing...");
         
         //Set the singleton
         m_singleton = this;
@@ -56,6 +59,12 @@ public class AeonActivity extends Activity
     {
     	return m_singleton;
     }
+    
+    public abstract void on_game_start();
+    public abstract void on_update(float dt);
+    
+    //TODO: implement on_game_stop
+    public abstract void on_game_stop();
     
     private static AeonActivity 		m_singleton;
 }
